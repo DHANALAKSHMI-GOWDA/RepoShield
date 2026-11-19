@@ -4,7 +4,7 @@
 // Connected to FastAPI Backend
 // ==========================================
 
-const API_URL = "/api/scan";
+const API_URL = "https://reposhield-api-erob.onrender.com/scan";
 const MAX_FILE_SIZE = 20 * 1024 * 1024;
 
 // Current scan data
