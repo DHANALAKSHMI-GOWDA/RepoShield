@@ -1,0 +1,558 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RepoShield | Repository Security</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app-shell">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-mark">⬡</div>
+            <div>
+                <strong>RepoShield</strong>
+                <small>REPOSITORY SECURITY</small>
+            </div>
+        </div>
+
+        <p class="side-label">WORKSPACE</p>
+
+        <nav id="main-nav">
+            <button class="nav-item active" data-page="dashboard">▦ Dashboard</button>
+            <button class="nav-item" data-page="scan">⇧ Scan Repository</button>
+            <button class="nav-item" data-page="results">✳ Vulnerabilities</button>
+            <button class="nav-item" data-page="secrets">⌕ Secrets</button>
+            <button class="nav-item" data-page="docker">⬡ Docker Security</button>
+            <button class="nav-item" data-page="github">⑂ GitHub Actions</button>
+            <button class="nav-item" data-page="reports">▤ Reports</button>
+            <button class="nav-item" data-page="settings">⚙ Settings</button>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <div class="safe-card">
+                <strong>⬡ Built for safer shipping</strong>
+                <small>Review findings before you deploy.</small>
+            </div>
+            <div class="workspace-link">
+                ▱ Expo workspace
+                <small>Local repository scanning</small>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-area">
+
+        <header class="topbar">
+            <div class="breadcrumbs">
+                Workspace <span>›</span>
+                <strong id="breadcrumb">Dashboard</strong>
+            </div>
+
+            <div class="top-actions">
+                <span class="sample-label">Live scanning</span>
+                <span>♧</span>
+                <span class="demo-user">RepoShield</span>
+            </div>
+        </header>
+
+        <div class="content">
+
+            <div class="notice">
+                ⓘ Upload a repository ZIP to begin your security scan.
+            </div>
+
+            <!-- DASHBOARD -->
+            <section class="page active" id="page-dashboard">
+
+                <div class="page-heading">
+                    <div>
+                        <h1>Security Overview</h1>
+                        <p>Understand your repository's security, from code to deployment.</p>
+                    </div>
+
+                    <button class="primary-btn" data-go="scan">
+                        Scan New Repository
+                    </button>
+                </div>
+
+                <div class="stats-grid">
+
+                    <article class="stat-card">
+                        <div class="stat-top">Security Score</div>
+                        <strong id="securityScore">--</strong>
+                        <p>Waiting for your first scan</p>
+                    </article>
+
+                    <article class="stat-card">
+                        <div class="stat-top">Critical Issues</div>
+                        <strong class="red" id="criticalIssues">0</strong>
+                        <p>Critical findings detected</p>
+                    </article>
+
+                    <article class="stat-card">
+                        <div class="stat-top">High Issues</div>
+                        <strong class="orange" id="highIssues">0</strong>
+                        <p>High severity findings detected</p>
+                    </article>
+
+                    <article class="stat-card">
+                        <div class="stat-top">Total Findings</div>
+                        <strong id="totalFindings">0</strong>
+                        <p>Across all security scanners</p>
+                    </article>
+
+                </div>
+
+                <article class="panel">
+                    <div class="panel-heading">
+                        <div>
+                            <h2>Recent security findings</h2>
+                            <p>Findings from your latest scan</p>
+                        </div>
+
+                        <button class="outline-btn" data-go="results">
+                            View all findings
+                        </button>
+                    </div>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ISSUE</th>
+                                <th>SEVERITY</th>
+                                <th>FILE</th>
+                                <th>SCANNER</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="dashboard-findings"></tbody>
+                    </table>
+                </article>
+
+                <div class="bottom-grid">
+
+                    <article class="panel">
+                        <div class="panel-heading">
+                            <h2>Recent scan history</h2>
+                            <button class="text-btn" data-go="reports">
+                                View reports
+                            </button>
+                        </div>
+
+                        <div id="recent-history"></div>
+                    </article>
+
+                    <article class="panel">
+                        <h2>Repository security</h2>
+                        <p>Run a repository scan to identify vulnerabilities, exposed secrets and configuration risks.</p>
+                        <button class="text-btn" data-go="scan">
+                            Start a new scan →
+                        </button>
+                    </article>
+
+                </div>
+
+            </section>
+
+            <!-- SCAN REPOSITORY -->
+            <section class="page" id="page-scan">
+
+                <h1>Scan Your Repository</h1>
+                <p>Upload a ZIP archive to check your code, secrets and deployment configuration.</p>
+
+                <article class="panel">
+                    <h2>Repository archive</h2>
+                    <p>Choose the repository you want to scan.</p>
+
+                    <label class="drop-zone" id="drop-zone">
+                        <input type="file" id="zip-file" accept=".zip" hidden>
+
+                        <span class="upload-icon">⇧</span>
+                        <strong id="upload-title">Drag & drop your repository ZIP here</strong>
+                        <small>or browse your computer to choose a file</small>
+                        <span class="browse-btn">Browse Files</span>
+                        <small>Supported format: ZIP · Maximum size: 20 MB</small>
+                    </label>
+
+                    <div id="selected-file" class="selected-file">
+                        No repository selected.
+                    </div>
+
+                    <button class="primary-btn" id="scan-button">
+                        Scan Repository
+                    </button>
+
+                    <p id="scan-status"></p>
+                </article>
+
+                <article class="panel">
+                    <h2>What gets checked?</h2>
+                    <p>Four focused checks. One clear report.</p>
+                    <p>✳ Dependency vulnerabilities</p>
+                    <p>⌕ Exposed secrets</p>
+                    <p>⬡ Docker security</p>
+                    <p>⑂ GitHub Actions</p>
+                </article>
+
+            </section>
+
+            <!-- SCAN RESULTS -->
+            <section class="page" id="page-results">
+
+                <div class="page-heading">
+                    <div>
+                        <h1>Scan Results</h1>
+                        <p id="results-subtitle">No scans performed yet.</p>
+                    </div>
+
+                    <button class="primary-btn" data-go="scan">
+                        Scan New Repository
+                    </button>
+                </div>
+
+                <div class="success-banner" id="scan-success" hidden></div>
+
+                <div class="results-stats">
+
+                    <article class="stat-card">
+                        <p>Security Score</p>
+                        <strong id="resultScore">--</strong>
+                    </article>
+
+                    <article class="severity-card critical">
+                        <span>Critical</span>
+                        <strong id="resultCritical">0</strong>
+                    </article>
+
+                    <article class="severity-card high">
+                        <span>High</span>
+                        <strong id="resultHigh">0</strong>
+                    </article>
+
+                    <article class="severity-card medium">
+                        <span>Medium</span>
+                        <strong id="resultMedium">0</strong>
+                    </article>
+
+                    <article class="severity-card low">
+                        <span>Low</span>
+                        <strong id="resultLow">0</strong>
+                    </article>
+
+                </div>
+
+                <article class="panel">
+                    <h2>Security findings</h2>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ISSUE</th>
+                                <th>SEVERITY</th>
+                                <th>FILE</th>
+                                <th>LINE</th>
+                                <th>ACTION</th>
+                            </tr>
+                        </thead>
+                        <tbody id="results-findings"></tbody>
+                    </table>
+                </article>
+
+            </section>
+
+            <!-- FINDING DETAILS -->
+            <section class="page" id="page-finding">
+
+                <button class="back-link" data-go="results">
+                    ← Back to scan results
+                </button>
+
+                <h1>Finding Details</h1>
+                <p>Select a finding from the scan results to review it.</p>
+
+                <article class="panel">
+                    <h2>Finding information</h2>
+                    <p>Detailed finding information will be displayed here.</p>
+                </article>
+
+            </section>
+
+            <!-- REPORTS -->
+            <section class="page" id="page-reports">
+
+                <div class="page-heading">
+                    <div>
+                        <h1>Reports</h1>
+                        <p>Review past scans and download security findings.</p>
+                    </div>
+
+                    <button class="primary-btn" data-go="scan">
+                        Scan New Repository
+                    </button>
+                </div>
+
+                <div class="report-summary">
+                    <div>
+                        <strong id="reportCount">0</strong>
+                        <small>completed scans</small>
+                    </div>
+
+                    <div>
+                        <strong id="repositoryCount">0</strong>
+                        <small>repositories</small>
+                    </div>
+
+                    <div>
+                        <strong id="latestScanDate">--</strong>
+                        <small>latest scan</small>
+                    </div>
+                </div>
+
+                <article class="panel">
+                    <h2>Repository scan history</h2>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>REPOSITORY</th>
+                                <th>SCAN DATE</th>
+                                <th>FINDINGS</th>
+                                <th>SECURITY SCORE</th>
+                                <th>DOWNLOAD REPORT</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reports-table"></tbody>
+                    </table>
+                </article>
+
+            </section>
+
+           
+            <!-- SECRETS -->
+            <section class="page" id="page-secrets">
+
+                <div class="page-heading">
+                    <div>
+                        <h1>Secrets Scanner</h1>
+                        <p>Review exposed credentials and sensitive values detected in your repository.</p>
+                    </div>
+                    <button class="outline-btn" data-go="scan">
+                        Scan Repository
+                    </button>
+                </div>
+
+                <div class="results-stats">
+                    <article class="stat-card">
+                        <p>Total Secret Findings</p>
+                        <strong id="secrets-total">0</strong>
+                    </article>
+                    <article class="severity-card critical">
+                        <span>Critical</span>
+                        <strong id="secrets-critical">0</strong>
+                    </article>
+                    <article class="severity-card high">
+                        <span>High</span>
+                        <strong id="secrets-high">0</strong>
+                    </article>
+                    <article class="severity-card medium">
+                        <span>Medium</span>
+                        <strong id="secrets-medium">0</strong>
+                    </article>
+                    <article class="severity-card low">
+                        <span>Low</span>
+                        <strong id="secrets-low">0</strong>
+                    </article>
+                </div>
+
+                <article class="panel">
+                    <h2>Detected secrets</h2>
+                    <p id="secrets-status">Run a repository scan to see secret findings.</p>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ISSUE</th>
+                                <th>SEVERITY</th>
+                                <th>FILE</th>
+                                <th>LINE</th>
+                            </tr>
+                        </thead>
+                        <tbody id="secrets-findings"></tbody>
+                    </table>
+                </article>
+
+            </section>
+
+            <!-- DOCKER -->
+            <section class="page" id="page-docker">
+
+                <div class="page-heading">
+                    <div>
+                        <h1>Docker Security</h1>
+                        <p>Review security risks in Dockerfiles and Docker Compose configurations.</p>
+                    </div>
+                    <button class="outline-btn" data-go="scan">
+                        Scan Repository
+                    </button>
+                </div>
+
+                <div class="results-stats">
+                    <article class="stat-card">
+                        <p>Total Docker Findings</p>
+                        <strong id="docker-total">0</strong>
+                    </article>
+                    <article class="severity-card critical">
+                        <span>Critical</span>
+                        <strong id="docker-critical">0</strong>
+                    </article>
+                    <article class="severity-card high">
+                        <span>High</span>
+                        <strong id="docker-high">0</strong>
+                    </article>
+                    <article class="severity-card medium">
+                        <span>Medium</span>
+                        <strong id="docker-medium">0</strong>
+                    </article>
+                    <article class="severity-card low">
+                        <span>Low</span>
+                        <strong id="docker-low">0</strong>
+                    </article>
+                </div>
+
+                <article class="panel">
+                    <h2>Docker security findings</h2>
+                    <p id="docker-status">Run a repository scan to see Docker findings.</p>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ISSUE</th>
+                                <th>SEVERITY</th>
+                                <th>FILE</th>
+                                <th>SCANNER</th>
+                            </tr>
+                        </thead>
+                        <tbody id="docker-findings"></tbody>
+                    </table>
+                </article>
+
+            </section>
+
+            <!-- GITHUB ACTIONS -->
+            <section class="page" id="page-github">
+
+                <div class="page-heading">
+                    <div>
+                        <h1>GitHub Actions Security</h1>
+                        <p>Review security issues detected in GitHub Actions workflow configurations.</p>
+                    </div>
+                    <button class="outline-btn" data-go="scan">
+                        Scan Repository
+                    </button>
+                </div>
+
+                <div class="results-stats">
+                    <article class="stat-card">
+                        <p>Total Workflow Findings</p>
+                        <strong id="github-total">0</strong>
+                    </article>
+                    <article class="severity-card critical">
+                        <span>Critical</span>
+                        <strong id="github-critical">0</strong>
+                    </article>
+                    <article class="severity-card high">
+                        <span>High</span>
+                        <strong id="github-high">0</strong>
+                    </article>
+                    <article class="severity-card medium">
+                        <span>Medium</span>
+                        <strong id="github-medium">0</strong>
+                    </article>
+                    <article class="severity-card low">
+                        <span>Low</span>
+                        <strong id="github-low">0</strong>
+                    </article>
+                </div>
+
+                <article class="panel">
+                    <h2>Workflow security findings</h2>
+                    <p id="github-status">Run a repository scan to see workflow findings.</p>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ISSUE</th>
+                                <th>SEVERITY</th>
+                                <th>FILE</th>
+                                <th>LINE</th>
+                            </tr>
+                        </thead>
+                        <tbody id="github-findings"></tbody>
+                    </table>
+                </article>
+
+            </section>
+
+           
+<!-- SETTINGS -->
+<section class="page" id="page-settings">
+
+    <div class="page-heading">
+        <div>
+            <h1>Settings</h1>
+            <p>Application information and workspace configuration.</p>
+        </div>
+    </div>
+
+    <article class="panel">
+        <h2>Application</h2>
+        <p><strong>Application name:</strong> RepoShield</p>
+        <p><strong>Version:</strong> 1.0.0</p>
+        <p><strong>Workspace:</strong> Local repository scanning</p>
+        <p><strong>Backend:</strong> FastAPI</p>
+        <p><strong>Frontend:</strong> HTML, CSS and JavaScript</p>
+    </article>
+
+    <article class="panel">
+        <h2>Scan Configuration</h2>
+        <p><strong>Maximum upload size:</strong> 20 MB</p>
+        <p><strong>Maximum extracted size:</strong> 100 MB</p>
+        <p><strong>Maximum files per scan:</strong> 2,000</p>
+        <p><strong>Supported upload format:</strong> ZIP</p>
+    </article>
+
+    <article class="panel">
+        <h2>Security Scanners</h2>
+        <p>✓ Secret Scanner</p>
+        <p>✓ Dependency Scanner (OSV API)</p>
+        <p>✓ Docker Scanner</p>
+        <p>✓ Docker Compose Scanner</p>
+        <p>✓ GitHub Actions Workflow Scanner</p>
+    </article>
+
+    <article class="panel">
+        <h2>Workspace Navigation</h2>
+        <p>Return to your security overview or start a new repository scan.</p>
+
+        <button class="primary-btn" data-go="dashboard">
+            Back to Dashboard
+        </button>
+
+        <button class="outline-btn" data-go="scan">
+            Scan Repository
+        </button>
+    </article>
+
+</section>
+
+
+<script src="script.js"></script>
+</body>
+</html>

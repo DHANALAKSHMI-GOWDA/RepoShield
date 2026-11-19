@@ -1,0 +1,10 @@
+pip-audit
+pytest
+PyYAML
+fastapi
+uvicorn
+python-multipart
+pip-audit
+pytest
+PyYAML
+cvss
